@@ -16,14 +16,17 @@ datastore = dataset.connect(DATASTORE_PATH)
 
 class Handler(tornado.web.RequestHandler):
     def get(self):
-        self.write('hello_world')
+        self.render('templates/home.html')
 
 class UpdateHandler(tornado.web.RequestHandler):
     def get(self):
         for image_path in glob.glob(photo_dir + '*.jpg'):
             md5 = hasher.md5(image_path)
             if datastore['images'].find_one(md5=md5) is None:
-                
+                datastore.insert({
+                    'md5': md5,
+                    'row': 0
+                })
 
 
 settings = {
