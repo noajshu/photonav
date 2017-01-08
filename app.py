@@ -3,6 +3,8 @@ import tornado.ioloop
 import dataset
 import glob
 from tools import hasher
+import os
+
 
 port = 7777
 
@@ -10,6 +12,7 @@ photo_dir = './sample_photos/'
 
 mypath = os.path.dirname(os.path.realpath(__file__))
 
+PERSISTENT_PATH = mypath
 DATASTORE_PATH = 'sqlite:///%s/datastore.db' % PERSISTENT_PATH
 datastore = dataset.connect(DATASTORE_PATH)
 
@@ -42,7 +45,7 @@ application = tornado.web.Application(
     **settings
 )
 
-def 
+
 
 if __name__ == "__main__":
     application.listen(port)
