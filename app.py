@@ -26,7 +26,7 @@ class UpdateHandler(tornado.web.RequestHandler):
         for image_path in glob.glob(photo_dir + '*.jpg'):
             md5 = hasher.md5(image_path)
             if datastore['images'].find_one(md5=md5) is None:
-                datastore.insert({
+                datastore['images'].insert({
                     'md5': md5,
                     'row': 0
                 })
@@ -41,6 +41,7 @@ settings = {
 application = tornado.web.Application(
     [
         (r"/", Handler),
+        (r"/update", UpdateHandler)
     ],
     **settings
 )
