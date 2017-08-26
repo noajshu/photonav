@@ -1,0 +1,26 @@
+img {
+    width: 15vw;
+    border: 2px solid #dadada;
+    border-radius: 7px;
+    &.selected {
+        outline: none;
+        border-color: #9ecaed;
+        box-shadow: 0 0 10px #9ecaed;
+    }
+}
+
+.global-container {
+    overflow: auto;
+    white-space:nowrap;
+}
+
+.container {
+    white-space:nowrap;
+    width: 100%;
+    height: 100%;
+}
+
+.item {
+    display: inline-block;
+    vertical-align: top;
+}

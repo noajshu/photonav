@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dashboard</title>
+
+    <!-- jQuery + Semantic UI -->
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+<div class="ui raised very padded text container segment">
+
+    <h1>Current username: {{ username }}</h1>
+
+    <p>
+        <i>Welcome to your settings page.</i>
+    </p>
+    <p>
+        Your name is {{ username }}.
+    </p>
+
+    <form action="/settings/password" method="post">
+        current password:
+        <div class="ui input">
+            <input type="password" name="current_password"></p>
+        </div>
+        <br>
+        new password:
+        <div class="ui input">
+            <input type="password" name="new_password"></p>
+        </div>
+        <br>
+        confirm new password:
+        <div class="ui input">
+            <input type="password" name="confirm_new_password"></p>
+        </div>
+        <br>
+        <input class="ui button" type="submit" value="submit">
+    </form>
+    {% if ok %}
+    Success, updated your settings
+    {% end %}
+    <hr>
+
+    <form action="/dashboard" method="get">
+        <input class="ui button" type="submit" value="dashboard">
+    </form>
+
+    <form action="/logout" method="get">
+        <input class="ui button" type="submit" value="logout">
+    </form>
+
+</div>
+
+</body>
+</html>

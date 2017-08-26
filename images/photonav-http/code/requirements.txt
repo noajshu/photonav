@@ -1,0 +1,7 @@
+appdirs==1.4.3
+packaging==16.8
+psycopg2==2.7.1
+pyparsing==2.2.0
+queries==1.9.1
+six==1.10.0
+tornado==4.5

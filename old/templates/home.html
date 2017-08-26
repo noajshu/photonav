@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>photonav</title>
+
+    <!-- jQuery + Semantic UI -->
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+
+</head>
+<body>
+
+<div class="ui grid">
+    {% for i in range(5) %}
+        <div class="three wide column" img_id="{{images[i]['id']}}">
+            <img class="ui medium image" src="/images/{{images[i]['id']}}">
+        </div>
+    {% end %}
+</div>
+
+
+</body>
+<script type="text/javascript">
+$(document).keydown(function(e) {
+    let new_image_id
+    console.log(e.which);
+    switch(e.which) {
+        case 37: // left
+            console.log($('.ui.grid').children().first()[0].getAttribute('img_id'))
+            $('.ui.grid').children().last().remove()
+
+            new_image_id = parseInt($('.ui.grid').children().first()[0].getAttribute('img_id')) - 1
+
+            $('.ui.grid').children().first().before('<div img_id="' + new_image_id.toString() + '" class="three wide column"><img class="ui medium image" src="/images/' + new_image_id.toString() + '"></div>')
+            break
+
+        case 38: // up
+            console.log('case 38')
+            $('.ui.grid').children()[2].remove()
+            new_image_id = parseInt($('.ui.grid').children().last()[0].getAttribute('img_id')) + 1
+
+            $('.ui.grid').children().last().after('<div img_id="' + new_image_id.toString() + '" class="three wide column"><img class="ui medium image" src="/images/' + new_image_id.toString() + '"></div>')
+            break
+
+        case 39: // right
+            console.log($('.ui.grid').children().last().attr('img_id'))
+            $('.ui.grid').children().first().remove()
+
+            new_image_id = parseInt($('.ui.grid').children().last()[0].getAttribute('img_id')) + 1
+
+            $('.ui.grid').children().last().after('<div img_id="' + new_image_id.toString() + '" class="three wide column"><img class="ui medium image" src="/images/' + new_image_id.toString() + '"></div>')
+            break
+
+        case 40: // down
+            break;
+
+        default: return; // exit this handler for other keys
+    }
+    $('.ui.grid').children().css('border-style', '')
+
+    $($('.ui.grid').children()[2]).css('border-style', 'solid')
+    $($('.ui.grid').children()[2]).css('border-width', '5px')
+    e.preventDefault(); // prevent the default action (scroll / move caret)
+});
+</script>
+</html>

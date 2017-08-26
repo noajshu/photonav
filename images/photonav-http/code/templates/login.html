@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>login</title>
+
+    <!-- jQuery + Semantic UI -->
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div class="ui raised very padded text container segment">
+
+    <form action="/login" method="post" class="ui form">
+        <h1 class="ui header">Web Application Login</h1>
+
+        <div class="field">
+            <label>username</label>
+            <div class="ui input">
+                <input type="text" name="username">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>password</label>
+            <div class="ui input">
+                <input type="password" name="password">
+            </div>
+        </div>
+
+        <input type="submit" value="login" class="ui button">
+        {% if bad_login %}
+            <br>
+            <i>Bad login info.</i>
+        {% end %}
+        <br>
+    </form>
+
+    <hr>
+
+    <a href="/signup"><button class="ui button">signup</button></a>
+
+</div>
+
+</body>
+</html>

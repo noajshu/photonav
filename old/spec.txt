@@ -1,0 +1,7 @@
+each image has a vindex
+and an hindex
+
+<img src="/images/128.-1.jpg">
+<img src="/images/128.3.jpg">
+
+<img src="/images/hindex.vindex.jpg">

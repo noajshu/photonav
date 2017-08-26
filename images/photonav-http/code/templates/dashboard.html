@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dashboard</title>
+
+    <!-- jQuery + Semantic UI -->
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/semantic.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+<div class="ui raised very padded text container segment">
+
+    <h1>Current username: {{ username }}</h1>
+
+    <p>
+        <i>Welcome to your account.</i>
+    </p>
+    <p>
+        Your name is {{ username }}.
+    </p>
+
+    <div class="ui grid">
+        {% for i in range(3) %}
+        <div class="row">
+            {% for j in range(5) %}
+                <div class="three wide column" i={{i}} j={{j}}>
+                    <img class="ui medium image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/BH_LMC.png/220px-BH_LMC.png">
+                </div>
+            {% end %}
+        </div>
+        {% end %}
+    </div>
+
+
+    <form action="/settings" method="get">
+        <input class="ui button" type="submit" value="settings">
+    </form>
+
+    <form action="/logout" method="get">
+        <input class="ui button" type="submit" value="logout">
+    </form>
+
+</div>
+
+<script type="text/javascript">
+var images = [
+    [
+        "/images/ancient-1807518_960_720.jpg",
+        "/images/drone-1080844_960_720.jpg",
+        "/images/forest-1818690_960_720.jpg"
+    ],
+    [
+        "/images/guitar-869217_960_720.jpg"
+    ],
+    [
+        "/images/kuala-lumpur-1820944_960_720.jpg",
+        "/images/man-1848960_960_720.jpg",
+        "/images/scotland-1761292_960_720.jpg",
+        "/images/yogurt-1786329_960_720.jpg"
+    ]
+]
+
+var default_src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/BH_LMC.png/220px-BH_LMC.png';
+
+class Image {
+    constructor (src, i, j) {
+        this.has_cursor = false
+        this.src = src
+        this.i = i
+        this.j = j
+    }
+
+    div() {
+        return $('.ui.grid')
+            .find('div[i="' + this.i.toString() + '"][j="' + this.j.toString() + '"]')
+    }
+
+    visible() {
+
+    }
+
+    hide() {
+        this.div().html('<img class="ui medium image" src="' + default_src + '">')
+    }
+
+    display() {
+        this.div().html('<img class="ui medium image" src="' + this.src + '">')
+    }
+
+    move(dir) {
+        this.hide()
+        switch (dir) {
+            case 'up':
+                this.i --
+                break
+            case 'down':
+                this.i ++
+                break
+            case 'right':
+                this.j ++
+                break
+            case 'left':
+                this.j --
+                break
+        }
+        this.display()
+    }
+}
+
+
+img0 = new Image(
+    'https://www.cesarsway.com/sites/newcesarsway/files/styles/large_article_preview/public/Puppy-101-The-ultimate-guide-to-raising-a-puppy.jpg?itok=i2bdbfX-',
+    0,
+    0
+)
+
+img1 = new Image(
+    'https://www.cesarsway.com/sites/newcesarsway/files/styles/large_article_preview/public/Puppy-101-The-ultimate-guide-to-raising-a-puppy.jpg?itok=i2bdbfX-',
+    1,
+    2
+)
+img0.display()
+img1.display()
+
+</script>
+
+</body>
+</html>

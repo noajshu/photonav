@@ -1,0 +1,47 @@
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: "{{APP_NAME}}"
+  labels:
+    app: "{{APP_NAME}}"
+spec:
+  replicas: 1
+  selector:
+    app: "{{APP_NAME}}"
+  template:
+    metadata:
+      labels:
+        app: "{{APP_NAME}}"
+    spec:
+      containers:
+      - name: "{{APP_NAME}}{{APP_EXTENSION}}"
+        image: "gcr.io/kubernetes-project-1295/{{APP_NAME}}{{APP_EXTENSION}}:v{{ PRIMARY_IMAGE_VERSION}}"
+        ports:
+        - name: http-server
+          containerPort: 7777
+        env:
+        - name: DB_FQDN
+          value: postgresql://database_user:UnicornCanteloupe@localhost:5432/the_database
+      - name: "{{APP_NAME}}-datastore"
+        image: "gcr.io/kubernetes-project-1295/{{APP_NAME}}-datastore:v{{ DATASTORE_IMAGE_VERSION}}"
+        ports:
+        - name: postgres-port
+          containerPort: 5432
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: "/persistent"
+        env:
+        - name: PERSISTENT_PATH
+          value: "/persistent/"
+        - name: POSTGRES_PASSWORD
+          value: UnicornCanteloupe
+        - name: PGDATA
+          value: "/persistent/postgresql/data/pgdata"
+        - name: PGPORT
+          value: '5432'
+      volumes:
+      - name: persistent-storage
+        gcePersistentDisk:
+          pdName: "{{APP_NAME}}-datastore-disk"
+          fsType: ext4
