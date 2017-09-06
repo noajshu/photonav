@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'
 
 const REHYDRATE = 'persist/REHYDRATE'
-import { SET_CURSOR, MOVE_PHOTO_TO_ROW, MOVE_CURSOR } from '../actions'
+import { SET_CURSOR, MOVE_PHOTO_TO_ROW, MOVE_CURSOR, FETCH_PHOTOS } from '../actions'
 
 
 function getUpMovedPosition(
@@ -104,6 +104,12 @@ function gridReducer(
   action
 ) {
   switch(action.type) {
+    case FETCH_PHOTOS:
+      return {
+        ...state, photos: action.payload.photos.map(
+          photoName => ({url: `http://localhost:7777/img/${photoName}`, row: 0})
+        )
+      }
     case REHYDRATE:
       return {...state, photos: [
         {url: '/img/0.jpg', row: 0},

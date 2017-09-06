@@ -1,5 +1,5 @@
 img {
-    width: 15vw;
+    width: 100%;
     border: 2px solid #dadada;
     border-radius: 7px;
     &.selected {
@@ -21,6 +21,7 @@ img {
 }
 
 .item {
+    width: 15vw;
     display: inline-block;
     vertical-align: top;
 }

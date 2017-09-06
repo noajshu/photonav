@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { fetchPhotos } from '../actions'
 // import NativeListener from 'react-native-listener';
 
 
@@ -48,6 +49,10 @@ class PhotoNavigator extends Component {
   //   </div>
   // }
 
+  componentDidMount() {
+    this.props.fetchPhotos()
+  }
+
   _handleShortcuts = (action, event) => {
     switch (action) {
       case 'MOVE_PHOTO_UP':
@@ -80,6 +85,10 @@ class PhotoNavigator extends Component {
   }
 
   render() {
+    if (this.props.grid === null) {
+      return <div>Loading...</div>
+    }
+
     return <Shortcuts name='PHOTO_NAVIGATOR' handler={this._handleShortcuts.bind(this)}>
       <div className="global-container">
         {
@@ -110,13 +119,5 @@ export default connect(
   state => ({
     grid: state.grid
   }),
-  { setCursor, moveCursor, movePhotoToRow }
+  { setCursor, moveCursor, movePhotoToRow, fetchPhotos }
 )(PhotoNavigator)
-
-
-
-
-
-
-
-

@@ -24,29 +24,29 @@ const store = createStore(
       ReduxPromise,
       // ReduxLogger
     ),
-    autoRehydrate()
+    // autoRehydrate()
   )
 )
 
 class HydratedApplication extends Component {
 
-  constructor() {
-    super()
-    this.state = { rehydrated: false }
-  }
+  // constructor() {
+  //   super()
+  //   this.state = { rehydrated: false }
+  // }
 
-  componentWillMount(){
-    persistStore(store, {
-      blacklist: ['form']
-    }, () => {
-      this.setState({ rehydrated: true })
-    })
-  }
+  // componentWillMount(){
+  //   persistStore(store, {
+  //     blacklist: ['form']
+  //   }, () => {
+  //     this.setState({ rehydrated: true })
+  //   })
+  // }
 
   render() {
-    if(!this.state.rehydrated){
-      return <div className="full-page-loader">Rehydrating...</div>
-    }
+    // if(!this.state.rehydrated){
+    //   return <div className="full-page-loader">Rehydrating...</div>
+    // }
     return (
       <Provider store={store}>
         <PhotoNavigator />

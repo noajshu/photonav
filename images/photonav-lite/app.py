@@ -26,15 +26,33 @@ def get_date_sorted_files(dirpath):
         yield time.ctime(cdate), os.path.basename(path)
 
 
-class Handler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header(
+            'Access-Control-Allow-Headers',
+            'authorization, Authorization, Content-Type, '
+            'Depth, User-Agent, X-File-Size, X-Requested-With, '
+            'X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control'
+        )
+        self.set_header('Access-Control-Allow-Methods', 'PUT, DELETE, POST, GET, OPTIONS')
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
+
+
+class Handler(BaseHandler):
     @gen.coroutine
     def get(self):
-        self.write('[')
-        for t, image in get_date_sorted_files('/Volumes/Lilfoot/Pictures/phone_image_library/'):
-            self.write(image)
-            self.write(',')
-        self.write('a')
-        self.finish(']')
+        self.write({
+            'photos': [
+                image
+                for t, image in get_date_sorted_files(
+                    '/Volumes/Lilfoot/Pictures/phone_image_library/'
+                )
+            ][:100]
+        })
 
 
 settings = {
@@ -47,6 +65,11 @@ settings = {
 application = tornado.web.Application(
     [
         (r'/', Handler),
+        (
+            r'/img/(.+?)',
+            tornado.web.StaticFileHandler,
+            {'path': '/Volumes/Lilfoot/Pictures/phone_image_library/'}
+        )
     ],
     **settings
 )
