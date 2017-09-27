@@ -15,6 +15,7 @@ import PhotoNavigator from './components/PhotoNavigator'
 import rootReducer from './reducers';
 
 
+
 const store = createStore(
   rootReducer,
   compose(

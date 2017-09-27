@@ -6,6 +6,9 @@ const REHYDRATE = 'persist/REHYDRATE'
 import { SET_CURSOR, MOVE_PHOTO_TO_ROW, MOVE_CURSOR, FETCH_PHOTOS } from '../actions'
 
 
+export const numRows = 2
+
+
 function getUpMovedPosition(
   photos, cursor
 ) {
@@ -130,9 +133,12 @@ function gridReducer(
       ]
     }
     case MOVE_PHOTO_TO_ROW:
-      let photos = state.photos.slice()
-      photos[action.payload.i].row = action.payload.j
-      return {...state, photos}
+      if (action.payload.j < numRows && action.payload.j >= 0) {
+        let photos = state.photos.slice()
+        photos[action.payload.i].row = action.payload.j
+        return {...state, photos}
+      }
+      return state
     case SET_CURSOR:
       return {
         ...state,
@@ -141,30 +147,31 @@ function gridReducer(
     case MOVE_CURSOR:
       let newPosition = -1
       switch(action.payload) {
-        // intentionally incorrect for now
         case 'right':
-          newPosition = getRightMovedPosition(
-            state.photos,
-            state.cursor
-          )
+          // newPosition = getRightMovedPosition(
+          //   state.photos,
+          //   state.cursor
+          // )
+          newPosition = state.cursor + 1
           break
         case 'left':
-          newPosition = getLeftMovedPosition(
-            state.photos,
-            state.cursor
-          )
+          // newPosition = getLeftMovedPosition(
+          //   state.photos,
+          //   state.cursor
+          // )
+          newPosition = state.cursor - 1
           break
         case 'up':
-          newPosition = getUpMovedPosition(
-            state.photos,
-            state.cursor
-          )
+          // newPosition = getUpMovedPosition(
+          //   state.photos,
+          //   state.cursor
+          // )
           break
         case 'down':
-          newPosition = getDownMovedPosition(
-            state.photos,
-            state.cursor
-          )
+          // newPosition = getDownMovedPosition(
+          //   state.photos,
+          //   state.cursor
+          // )
           break
       }
       console.log('in reducer, newPosition = ', newPosition)

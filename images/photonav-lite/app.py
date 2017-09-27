@@ -6,9 +6,13 @@ import os
 from stat import S_ISREG, ST_CTIME, ST_MODE
 import sys
 import time
+import json
 
 
-port = 7777
+PHOTO_METADATA_FILE = 'photos.jsonl'
+PHOTO_DIR = '/Volumes/Lilfoot/Pictures/phone_image_library/'
+HTTP_PORT = 7777
+
 
 def get_date_sorted_files(dirpath):
     # get all entries in the directory w/ stats
@@ -24,6 +28,21 @@ def get_date_sorted_files(dirpath):
 
     for cdate, path in sorted(entries):
         yield time.ctime(cdate), os.path.basename(path)
+
+
+if os.path.exists(PHOTO_METADATA_FILE):
+    with open(PHOTO_METADATA_FILE, 'r') as infile:
+        photos = [
+            json.loads(line)
+            for line in infile
+        ]
+else:
+    photos = [
+        {'path': photo, 'row': 0}
+        for t, photo in get_date_sorted_files(
+            PHOTO_DIR
+        )
+    ]
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -42,17 +61,27 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
 
-class Handler(BaseHandler):
+class PhotoCountHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
-        self.write({
-            'photos': [
-                image
-                for t, image in get_date_sorted_files(
-                    '/Volumes/Lilfoot/Pictures/phone_image_library/'
-                )
-            ][:100]
-        })
+        global photos
+        self.write(json.dumps(len(photos)))
+
+
+class IndexedPhotoHandler(BaseHandler):
+    @gen.coroutine
+    def get(self, i):
+        global photos
+        i = int(i)
+        self.write(photos[i])
+        # self.redirect('/img/{}'.format(photos[i]['path']))
+
+    @gen.coroutine
+    def put(self, i):
+        global photos
+        i = int(i)
+        new_row = int(self.request.body)
+        photos[i]['row'] = new_row
 
 
 settings = {
@@ -61,23 +90,28 @@ settings = {
     'debug': True
 }
 
-
 application = tornado.web.Application(
     [
-        (r'/', Handler),
+        # (r'/', Handler),
+        (r'/photos/count', PhotoCountHandler),
+        (r'/imgnum/(.+?)', IndexedPhotoHandler),
         (
             r'/img/(.+?)',
             tornado.web.StaticFileHandler,
-            {'path': '/Volumes/Lilfoot/Pictures/phone_image_library/'}
+            {'path': PHOTO_DIR}
         )
     ],
     **settings
 )
 
-HTTP_PORT = 7777
-
 if __name__ == '__main__':
     print('Starting tornado server on port %d' % HTTP_PORT)
     application.listen(HTTP_PORT)
     ioloop = tornado.ioloop.IOLoop.instance()
-    ioloop.start()
+    try:
+        ioloop.start()
+    except KeyboardInterrupt:
+        print('KeyboardInterrupt, saving photos metadata...')
+        with open(PHOTO_METADATA_FILE, 'w') as outfile:
+            for photo in photos:
+                outfile.write(json.dumps(photo) + '\n')

@@ -8,6 +8,8 @@ import { fetchPhotos } from '../actions'
 
 import { movePhotoToRow, setCursor, moveCursor } from '../actions'
 
+import { numRows, numPhotosInView } from '../reducers'
+
 import '../style/style.scss'
 
 
@@ -25,6 +27,17 @@ import { ShortcutManager, Shortcuts } from 'react-shortcuts'
 const shortcutManager = new ShortcutManager(keymap)
 
 
+class Photo extends Component {
+  render() {
+    return _.range(numRows).map(
+      j => <div className="container">{
+        j == this.props.row ? <img src={this.props.src} /> : null
+      }</div>
+    )
+  }
+}
+
+Photo = connect()
 
 class PhotoNavigator extends Component {
 
@@ -91,9 +104,9 @@ class PhotoNavigator extends Component {
 
     return <Shortcuts name='PHOTO_NAVIGATOR' handler={this._handleShortcuts.bind(this)}>
       <div className="global-container">
-        {
-          _.range(8).map(
-            j => <div key={j} className="container">
+        {/*
+          _.range(numRows).map(
+            j => (Math.abs(j - this.props.grid.cursor)) ? <div key={j} className="container">
               {this.props.grid.photos.map(
                 (photo, i) => (
                   photo.row == j ? <div className="item" key={i}><img
@@ -103,9 +116,17 @@ class PhotoNavigator extends Component {
                   /></div> : <div className="item" key={i}><img /></div>
                 )
               )}
-            </div>
+            </div> : null
+          )
+        */}
+        <div className="container">
+        {
+          _.range(3).map(
+            // i => <Photo key={i} i={i}></Photo>
+            i => <div key={i}>photo goes here</div>
           )
         }
+        </div>
       </div>
     </Shortcuts>
   }
